@@ -24,8 +24,6 @@ public class Task1 {
         int minNum = findMin(array);
         double midNum = findMid(array);
         System.out.printf("max number - %d \nmid number - %s \nmin number - %d", maxNum, midNum, minNum);
-
-
     }
 
     /**
