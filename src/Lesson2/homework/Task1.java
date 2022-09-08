@@ -22,7 +22,7 @@ public class Task1 {
         System.out.println();
 
         for (Person person : RAW_DATA) {
-            System.out.println(person.id + " - " + person.name);
+            System.out.println(person.getId() + " - " + person.getName());
         }
 
         System.out.println();
@@ -32,35 +32,41 @@ public class Task1 {
         System.out.println();
 
 
-        TreeMap<String, PriorityQueue> res = new TreeMap<>();
+        filterDuplicate(RAW_DATA);
+        TreeMap<String, PriorityQueue<Person>> res = groupNameAndSortId(RAW_DATA);
+        print(res);
+    }
 
+    public static TreeMap<String, PriorityQueue<Person>> groupNameAndSortId(ArrayList<Person> RAW_DATA) {
+        TreeMap<String, PriorityQueue<Person>> res = new TreeMap<>();
         for (int i = 0; i < RAW_DATA.size(); i++) {
-            if (!res.containsKey(RAW_DATA.get(i).name)) {
-                res.put(RAW_DATA.get(i).name.toString(), new PriorityQueue<>());
-                PriorityQueue personPriorityQueue = res.get(RAW_DATA.get(i).name);
-                personPriorityQueue.add(RAW_DATA.get(i));
-            } else if (res.containsKey(RAW_DATA.get(i).name)) {
-                PriorityQueue personPriorityQueue = res.get(RAW_DATA.get(i).name);
-                personPriorityQueue.add(RAW_DATA.get(i));
+            if (!res.containsKey(RAW_DATA.get(i).getName())) {
+                res.put(RAW_DATA.get(i).getName(), new PriorityQueue<>(Collections.singletonList(RAW_DATA.get(i))));
+            } else {
+                res.get(RAW_DATA.get(i).getName()).add(RAW_DATA.get(i));
             }
+        }
+        return res;
+    }
+
+    public static void filterDuplicate(ArrayList<Person> RAW_DATA) {
+        for (int i = 0; i < RAW_DATA.size(); i++) {
             for (int j = 0; j < RAW_DATA.size(); j++) {
-                if ((i != j) && (RAW_DATA.get(i).id == RAW_DATA.get(j).id && RAW_DATA.get(i).name.equalsIgnoreCase(RAW_DATA.get(j).name))) {
+                if ((i != j) && RAW_DATA.get(i).getId() == RAW_DATA.get(j).getId()) {
                     RAW_DATA.remove(j);
                 }
             }
         }
-        print(res);
     }
 
-    public static void print(TreeMap treeMap) {
-        for (Object key : treeMap.keySet()) {
-            PriorityQueue priorityQueue = (PriorityQueue) treeMap.get(key);
-            for (int i = 1; !priorityQueue.isEmpty(); i++) {
-                Person person = (Person) priorityQueue.poll();
+    public static void print(TreeMap<String, PriorityQueue<Person>> treeMap) {
+        for (String key : treeMap.keySet()) {
+            int i = 1;
+            for (Person person : treeMap.get(key)) {
                 if (i == 1) {
-                    System.out.println(person.name + ":");
+                    System.out.println(person.getName() + ":");
                 }
-                System.out.printf("%x - %s (%x) \n", i, person.name, person.id);
+                System.out.printf("%x - %s (%x) \n", i++, person.getName(), person.getId());
             }
         }
     }

@@ -3,8 +3,8 @@ package Lesson2.homework;
 import java.util.Objects;
 
 public class Person implements Comparable<Person> {
-    final int id;
-    final String name;
+    private final int id;
+    private final String name;
 
     Person(int id, String name) {
         this.id = id;
@@ -33,6 +33,6 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
-        return Integer.compare(this.id, o.id);
+        return Integer.compare(this.getId(), o.getId());
     }
 }
