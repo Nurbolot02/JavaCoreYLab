@@ -15,24 +15,17 @@ public class Task3 {
         System.out.println(fuzzySearch("cwhl", "cartwheel"));
         System.out.println(fuzzySearch("cwhee", "cartwheel"));
         System.out.println(fuzzySearch("cartwheel", "cartwheel"));
-        System.out.println(fuzzySearch("cwheeel", "cartwheel"));
+        System.out.println(fuzzySearch("cwheeel", "cartwheel")); // 4 5 6 7
         System.out.println(fuzzySearch("lw", "cartwheel"));
     }
 
     public static boolean fuzzySearch(String str1, String str2) {
-        for (int i = 0, lastInd = 0; i < str1.length(); i++) {
-            for (int j = lastInd; j < str2.length(); j++) {
-                if (str1.length() - 1 == i && str1.charAt(i) == str2.charAt(j)) {
-                    return true;
-                }
-                if (str1.charAt(i) == str2.charAt(j)) {
-                    lastInd = j + 1;
-                    break;
-                } else if (j == str2.length() - 1) {
-                    return false;
-                }
-            }
+        if (str1 == null || str2 == null) throw new NullPointerException("Null link!");
+        int i, j;
+        for (i = 0, j = 0; j < str1.length(); i++, j++) {
+            i = (str2.substring(i).indexOf(str1.charAt(j)) != -1 ? str2.substring(i).indexOf(str1.charAt(j)) + i : -1);
+            if (i == -1) return false;
         }
-        return false;
+        return i != -1;
     }
 }
