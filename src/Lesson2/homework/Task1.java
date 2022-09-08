@@ -55,12 +55,13 @@ public class Task1 {
     }
 
     public static TreeMap<String, PriorityQueue<Person>> groupNameAndSortId(List<Person> RAW_DATA) {
+        if (RAW_DATA == null) throw new NullPointerException("Raw_Data is null");
         TreeMap<String, PriorityQueue<Person>> res = new TreeMap<>();
-        for (int i = 0; i < RAW_DATA.size(); i++) {
-            if (!res.containsKey(RAW_DATA.get(i).getName())) {
-                res.put(RAW_DATA.get(i).getName(), new PriorityQueue<>(Collections.singletonList(RAW_DATA.get(i))));
+        for (Person raw_datum : RAW_DATA) {
+            if (!res.containsKey(raw_datum.getName())) {
+                res.put(raw_datum.getName(), new PriorityQueue<>(Collections.singletonList(raw_datum)));
             } else {
-                res.get(RAW_DATA.get(i).getName()).add(RAW_DATA.get(i));
+                res.get(raw_datum.getName()).add(raw_datum);
             }
         }
         return res;
