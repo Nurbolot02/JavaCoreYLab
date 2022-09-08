@@ -1,10 +1,11 @@
 package Lesson2.homework;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Task1 {
     public static void main(String[] args) {
-        ArrayList<Person> RAW_DATA = new ArrayList<>();
+        List<Person> RAW_DATA = new ArrayList<>();
         Collections.addAll(RAW_DATA,
                 new Person(0, "Harry"),
                 new Person(0, "Harry"), // дубликат
@@ -31,13 +32,29 @@ public class Task1 {
         System.out.println("Duplicate filtered, grouped by name, sorted by name and id:");
         System.out.println();
 
-
+        long startTime = System.nanoTime();
         filterDuplicate(RAW_DATA);
+        long endTime = System.nanoTime();
+        System.out.printf("my method: %s ms\n", endTime - startTime);
+
+        startTime = System.nanoTime();
+        RAW_DATA = RAW_DATA.stream()
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        endTime = System.nanoTime();
+        System.out.printf("stream method: %s ms\n", endTime - startTime);
+
+
+        startTime = System.nanoTime();
         TreeMap<String, PriorityQueue<Person>> res = groupNameAndSortId(RAW_DATA);
+        endTime = System.nanoTime();
+        System.out.printf("groupNameAndSortId method: %s ms\n", endTime - startTime);
+
         print(res);
     }
 
-    public static TreeMap<String, PriorityQueue<Person>> groupNameAndSortId(ArrayList<Person> RAW_DATA) {
+    public static TreeMap<String, PriorityQueue<Person>> groupNameAndSortId(List<Person> RAW_DATA) {
         TreeMap<String, PriorityQueue<Person>> res = new TreeMap<>();
         for (int i = 0; i < RAW_DATA.size(); i++) {
             if (!res.containsKey(RAW_DATA.get(i).getName())) {
@@ -49,7 +66,8 @@ public class Task1 {
         return res;
     }
 
-    public static void filterDuplicate(ArrayList<Person> RAW_DATA) {
+    public static void filterDuplicate(List<Person> RAW_DATA) {
+        if (RAW_DATA == null) throw new NullPointerException("Raw_Data is null");
         for (int i = 0; i < RAW_DATA.size(); i++) {
             for (int j = 0; j < RAW_DATA.size(); j++) {
                 if ((i != j) && RAW_DATA.get(i).getId() == RAW_DATA.get(j).getId()) {
@@ -60,6 +78,7 @@ public class Task1 {
     }
 
     public static void print(TreeMap<String, PriorityQueue<Person>> treeMap) {
+        if (treeMap == null) throw new NullPointerException("treeMap is null");
         for (String key : treeMap.keySet()) {
             int i = 1;
             for (Person person : treeMap.get(key)) {
