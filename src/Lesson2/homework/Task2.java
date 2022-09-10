@@ -1,8 +1,6 @@
 package Lesson2.homework;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Task2 {
     /*
@@ -11,19 +9,30 @@ public class Task2 {
     public static void main(String[] args) {
         List<Integer> numbers = Arrays.asList(3, 4, 2, 7);
         int waitingResult = 10;
-        List<Integer> result = findPairNumbers(numbers, waitingResult);
+        List<Integer> result = new ArrayList<>();
+        try {
+            result = findPairNumbers(numbers, waitingResult);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println((result.size() == 2 ?
                 "первые пару чисел, которые дают в сумме " + waitingResult + ": " + result
                 : "Не удалось найти пару сумма которых будет равен " + waitingResult));
     }
 
     public static List<Integer> findPairNumbers(List<Integer> array, int waitingResult) {
-        if (array == null) throw new NullPointerException("array is null");
-        for (int i : array) {
-            if (array.contains((waitingResult - i))) {
-                return Arrays.asList(i, (waitingResult - i));
+        if (array == null) throw new IllegalArgumentException("Array is null!");
+        if (array.size() < 2) throw new IllegalArgumentException("There are not enough elements in the array!");
+
+        Map<Integer, Integer> neededNumberAndHaveNumber = new HashMap<>();
+
+        for (int number : array) {
+            int neededNumber = waitingResult - number;
+            if (neededNumberAndHaveNumber.containsKey(number)) {
+                return Arrays.asList(neededNumber, number);
             }
+            neededNumberAndHaveNumber.put(neededNumber, number);
         }
-        return new ArrayList<>();
+        return new ArrayList<Integer>();
     }
 }
