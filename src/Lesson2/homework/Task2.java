@@ -1,29 +1,38 @@
 package Lesson2.homework;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Task2 {
     /*
     [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
      */
     public static void main(String[] args) {
-        int[] numbers = {3, 4, 2, 7};
+        List<Integer> numbers = Arrays.asList(3, 4, 2, 7);
         int waitingResult = 10;
-        int[] result = findPairNumbers(numbers, waitingResult);
-        System.out.println((result.length == 2 ?
-                "первые пару чисел, которые дают в сумме " + waitingResult + ": " + Arrays.toString(result)
+        List<Integer> result = new ArrayList<>();
+        try {
+            result = findPairNumbers(numbers, waitingResult);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println((result.size() == 2 ?
+                "первые пару чисел, которые дают в сумме " + waitingResult + ": " + result
                 : "Не удалось найти пару сумма которых будет равен " + waitingResult));
-
     }
 
-    public static int[] findPairNumbers(int[] array, int waitingResult) {
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array.length; j++) {
-                if (array[i] + array[j] == waitingResult) {
-                    return new int[]{array[i], array[j]};
-                }
+    public static List<Integer> findPairNumbers(List<Integer> array, int waitingResult) {
+        if (array == null) throw new IllegalArgumentException("Array is null!");
+        if (array.size() < 2) throw new IllegalArgumentException("There are not enough elements in the array!");
+
+        Map<Integer, Integer> neededNumberAndHaveNumber = new HashMap<>();
+
+        for (int number : array) {
+            int neededNumber = waitingResult - number;
+            if (neededNumberAndHaveNumber.containsKey(number)) {
+                return Arrays.asList(neededNumber, number);
             }
+            neededNumberAndHaveNumber.put(neededNumber, number);
         }
-        return new int[]{};
+        return new ArrayList<Integer>();
     }
 }
