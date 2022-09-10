@@ -11,21 +11,42 @@ public class Task3 {
     fuzzySearch("lw", "cartwheel"); // false
      */
     public static void main(String[] args) {
-        System.out.println(fuzzySearch("car", "ca6$$#_rtwheel"));
-        System.out.println(fuzzySearch("cwhl", "cartwheel"));
-        System.out.println(fuzzySearch("cwhee", "cartwheel"));
-        System.out.println(fuzzySearch("cartwheel", "cartwheel"));
-        System.out.println(fuzzySearch("cwheeel", "cartwheel")); // 4 5 6 7
-        System.out.println(fuzzySearch("lw", "cartwheel"));
+        try {
+            System.out.println(fuzzySearch("car", "ca6$$#_rtwheel")); // true
+            System.out.println(fuzzySearch("cwhl", "cartwheel")); // true
+            System.out.println(fuzzySearch("cwhee", "cartwheel")); // true
+            System.out.println(fuzzySearch("cartwheel", "cartwheel")); // true
+            System.out.println(fuzzySearch("cwheeel", "cartwheel")); // false
+            System.out.println(fuzzySearch("lw", "cartwheel")); // false
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public static boolean fuzzySearch(String str1, String str2) {
-        if (str1 == null || str2 == null) throw new NullPointerException("Null link!");
-        int i, j;
-        for (i = 0, j = 0; j < str1.length(); i++, j++) {
-            i = (str2.substring(i).indexOf(str1.charAt(j)) != -1 ? str2.substring(i).indexOf(str1.charAt(j)) + i : -1);
-            if (i == -1) return false;
+    public static boolean fuzzySearch(String substring, String string) {
+        if (substring == null || string == null) throw new IllegalArgumentException("Substring is null!");
+
+        int substringLength = substring.length();
+        int stringLength = string.length();
+
+        if (substringLength == 0 || stringLength == 0) {
+            throw new IllegalArgumentException("The length of the string is 0. It is not known what answer you expected");
         }
-        return i != -1;
+
+        if (substringLength > stringLength) return false;
+
+        int substringIndex = 0;
+
+        for (int i = 0; i < string.length(); i++) {
+            // Если оставшихся символов в строке меньше, чем в подстроке, то сравнение останавливается
+            if (substringLength - substringIndex > stringLength - i) return false;
+
+            if (Character.toLowerCase(string.charAt(i)) == Character.toLowerCase(substring.charAt(substringIndex))) {
+                substringIndex++;
+            }
+            if (substringIndex == substringLength) return true;
+        }
+        return false;
     }
 }
